@@ -1,0 +1,39 @@
+
+SET AUTOCOMMIT ON; 
+
+declare
+    num number(10);
+begin
+    course_project.popular_subject(1, 2016);
+    course_project.popular_teacher(1, '01-APR-16 12:00:00 AM', 'ECO 101'); 
+    course_project.calculate_gpa(1, '01-APR-16 12:00:00 AM'); 
+    course_project.zero_reg(1, '01-APR-16 12:00:00 AM'); 
+    course_project.retake_fee(1, '01-APR-16 12:00:00 AM'); 
+    course_project.calculate_loading('01-APR-16 12:00:00 AM'); 
+    course_project.stud_schedule('01-APR-16 12:00:00 AM', '004531EC911B9D3EF9A7C7A8524D054EA943BA3F', 1);
+    course_project.teacher_schedule('01-APR-16 12:00:00 AM');
+    course_project.count_subjects;
+    course_project.student_flow;
+    course_project.teacher_rating;
+    course_project.course_rating;
+    num := course_project.retake_fee;
+end;
+
+CREATE OR REPLACE TRIGGER grade_changes 
+BEFORE DELETE OR INSERT OR UPDATE ON course_selections 
+FOR EACH ROW 
+WHEN (NEW.STUD_ID is not null) 
+DECLARE 
+   grade_diff number; 
+BEGIN 
+   grade_diff := :NEW.QIYMET_YUZ  - :OLD.QIYMET_YUZ; 
+   dbms_output.put_line('Old grade: ' || :OLD.QIYMET_YUZ); 
+   dbms_output.put_line('New grade: ' || :NEW.QIYMET_YUZ); 
+   dbms_output.put_line('Grade difference: ' || grade_diff); 
+END;
+
+update  course_selections
+set QIYMET_YUZ = 84
+where ders_kod = 'LAW 212' and stud_id = '004531EC911B9D3EF9A7C7A8524D054EA943BA3F'
+
+TYPE Calendar IS VARRAY(366) OF DATE;
